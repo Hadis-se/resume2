@@ -3,7 +3,6 @@ const express = require("express");
 require('dotenv').config();
 const cors = require("cors");
 const app = express();
-const PORT = 4001;
 const multer = require("multer");
 const path = require("path");
 const { OpenAI } = require("openai");
@@ -176,6 +175,6 @@ app.post("/resumeFr/create", upload.single("headshotImage"), async (req, res) =>
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
+app.listen(process.env.SERVER_PORT, () => {
+    console.log(`Server listening on ${process.env.SERVER_PORT}`);
 });

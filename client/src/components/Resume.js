@@ -2,7 +2,7 @@ import ErrorPage from "./ErrorPage";
 import { useReactToPrint } from "react-to-print";
 import React, { useRef } from "react";
 
-const apiUrl = "http://localhost:4001";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Resume = ({ result }) => {
     const componentRef = useRef();
