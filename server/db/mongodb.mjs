@@ -32,4 +32,12 @@ export const saveUsers = async (userPayload) => {
 
 }
 
+export const findUserByEmail = async (email) => {
+  const result = await users.findOne({
+    email
+  });
+   return result;
+
+}
+
 
