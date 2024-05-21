@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-const Home = ({ setResult }) => {
+const CreateCV = ({ setResult }) => {
   const [fullName, setFullName] = useState("");
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
@@ -264,4 +264,4 @@ const Home = ({ setResult }) => {
   );
 };
 
-export default Home;
+export default CreateCV;
