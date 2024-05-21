@@ -2,8 +2,7 @@ import express from 'express';
 import {saveUsers} from '../db/mongodb.mjs';
 import bcrypt from 'bcrypt';
 import {findUserByEmail} from '../db/mongodb.mjs';
-import e from 'express';
-
+import jwt from 'jsonwebtoken';
 
 export const authRouter = express.Router();
 
@@ -55,7 +54,9 @@ authRouter.post("/create", async (req, res) => {
     const result = await saveUsers({
         name: req?.body?.name,
         email: req?.body?.email,
-        hashedPassword: hashedPassword
+        hashedPassword: hashedPassword,
+        roles:['user'],
+        status: 'active'
         
     });
     console.log(result)
@@ -67,3 +68,57 @@ authRouter.post("/create", async (req, res) => {
         message : 'User created'
     });
  });
+
+authRouter.post("/login", async (req, res) => {
+    if (!req?.body?.email) {
+        res.statusCode=422;
+        return res.json({
+            status: 'email is required'
+        });
+    }
+    if (!req?.body?.password) {
+        res.statusCode=422;
+        return res.json({
+            status: 'password is required'
+        });
+    }
+    const user = await findUserByEmail(req.body.email);
+    if (!user) {
+        res.statusCode=404;
+        return res.json({
+            status: "User not found"
+        });
+    }
+    console.log(user)
+    
+    const isPasswordMatch = bcrypt.compareSync(req.body.password, user.hashedPassword);
+    if (!isPasswordMatch) {
+        res.statusCode=403;
+        return res.json({
+            status: "Password is incorrect"
+        });}
+
+    if (user.status != 'active') {
+        res.statusCode=403;
+        return res.json({
+            status: "User is not active"
+        });
+    }
+    const token = jwt.sign(
+        {
+        email: req.body.email,
+        roles: user?.roles || [],
+    }, 
+    process.env.JWT_SECRET_KEY, 
+    {
+        expiresIn: '72h'
+    }
+);
+    
+    
+    res.json({
+        
+        token
+    });
+        }
+    );
