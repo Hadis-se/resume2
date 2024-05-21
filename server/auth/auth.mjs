@@ -122,3 +122,23 @@ authRouter.post("/login", async (req, res) => {
     });
         }
     );
+
+    authRouter.post("/validate", async (req, res) => {
+        const authorization = req?.headers?.authorization || '';
+        const jwt_token = authorization.replace('Bearer ', '');
+        const decoded= jwt.verify(jwt_token, process.env.JWT_SECRET_KEY);
+        if (!decoded?.email) {
+            res.statusCode=403;
+            return res.json({
+                status: "Invalid token"
+            });
+        }
+        
+        
+        
+        res.json({
+            
+           isValidate: true
+        });
+            }
+        );

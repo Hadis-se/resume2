@@ -1,15 +1,49 @@
 import { Link } from "react-router-dom";
 import "./styles.css";
+import { apiCall } from "../services/api";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function Login({result: resultState,setResult}) {
+const [responseMessage, setResponseMessage] = useState("");
+const navigate = useNavigate();
+
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handle submit");
+    try{
+      const result = await apiCall({
+        method: "POST",
+        uri: "auth/login", 
+        body:{
+        
+        email: resultState.email,
+        password: resultState.password},
+        isJwt: false,
+    });
+    console.log(result)
+    if (result?.data?.token){
+    localStorage.setItem("resume_server_jwt_token",result?.data?.token)
+    setTimeout(() => {
+      navigate("/");}
+      ,1000)
+    }
+    setResponseMessage(result?.data?.token)
+
+    }catch(err){
+    setResponseMessage(err?.response?.data?.status || err.message)
+    }
+  
   };
 
  
 
   return (
+    
     <div className="App">
+      {
+            responseMessage && <div>{responseMessage}</div>
+        }
       <h1>Login</h1>
       <form onSubmit={handleSubmit} className="form__container">
         <div className="form__controls">

@@ -2,6 +2,7 @@ import "./styles.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { apiCall } from "../services/api";
 
 
 export default function SignUp({result: resultState,setResult}) {
@@ -12,25 +13,21 @@ export default function SignUp({result: resultState,setResult}) {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let body = JSON.stringify({
-        name,
-        email: resultState.email,
-        password: resultState.password,
-      });
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: `${process.env.REACT_APP_API_URL}/auth/create`,
-        headers: { 
-          "Content-Type": "application/json"
-        },
-        data : body
-      };
+    
       try{
-        const result = await axios.request(config);
-      if(result?.data?._id){
-        setResponseMessage(`User ${result?.data?._id} created successfully.you will be redirected to login page in 5 seconds`)
-      }
+          const result = await apiCall({
+            method: "POST",
+            uri: "auth/create", 
+            body:{
+            name,
+            email: resultState.email,
+            password: resultState.password},
+            isJwt: false,
+        });
+
+        if(result?.data?._id){
+          setResponseMessage(`User ${result?.data?._id} created successfully.you will be redirected to login page in 5 seconds`)
+        }
       setTimeout(() => {
         navigate("/login");
       }, 5000);
