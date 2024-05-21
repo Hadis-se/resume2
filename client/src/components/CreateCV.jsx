@@ -51,7 +51,7 @@ const CreateCV = ({ setResult }) => {
     }
     else if (frenchChecked) {
       axios
-        .post(`${apiUrl}/resumeFr/create`, formData, {})
+        .post(`${apiUrl}/resume/createFr`, formData, {})
         .then((res) => {
           if (res.data.message) {
             setResult(res.data.data);

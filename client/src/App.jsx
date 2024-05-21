@@ -55,12 +55,11 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home result={result} setResult={setResult} />} />
+          <Route path="/" element={<CreateCV result={result} setResult={setResult} />} />
           <Route path="/login" element={<Login result={result} setResult={setResult} />} />
           <Route path="/SignUp" element={<SignUp result={result} setResult={setResult}/>} />
-          {/* <Route path="/" element={<CreateCV result={result} setResult={setResult} />} /> */}
-          {/* <Route path="/resume" element={<Resume result={result} setResult={setResult} />} />
-          <Route path="/resumeFr" element={<Resume result={result} setResult={setResult} />} /> */}
+           <Route path="/resume" element={<Resume result={result} setResult={setResult} />} />
+          <Route path="/resumeFr" element={<Resume result={result} setResult={setResult} />} />
         </Routes>
       </BrowserRouter>
     </div>

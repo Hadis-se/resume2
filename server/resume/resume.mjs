@@ -1,19 +1,20 @@
-//IMPORTS
-const express = require("express");
-require('dotenv').config();
-const cors = require("cors");
+import express from "express";
+import multer from "multer";
+import path from "path";
+import { OpenAI } from "openai";
 
-const PORT = 4002;
-const multer = require("multer");
-const path = require("path");
-const { OpenAI } = require("openai");
+
+export const resumeRouter = express.Router();
+
+
+
+
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
 //ROUTES
-app.use("/uploads", express.static("uploads"));
-app.use(express.static('public'))
+
 const generateID = () => Math.random().toString(36).substring(2, 10);
 let database = [];
 const ChatGPTFunction = async (text) => {
@@ -49,12 +50,12 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 * 5 },
 });
-app.get("/api", (req, res) => {
+resumeRouter.get("/api", (req, res) => {
     res.json({
         message: "Hello world",
     });
 });
-app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
+resumeRouter.post("/create", upload.single("headshotImage"), async (req, res) => {
     const {
         fullName,
         jobDesc,
@@ -112,7 +113,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         data,
     });
 });
-app.post("/resumeFr/create", upload.single("headshotImage"), async (req, res) => {
+resumeRouter.post("/createFr", upload.single("headshotImage"), async (req, res) => {
     const {
         fullName,
         jobDesc,
@@ -167,13 +168,4 @@ app.post("/resumeFr/create", upload.single("headshotImage"), async (req, res) =>
         message: "Request successful!",
         data,
     });
-});
-
-
-
-
-
-
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
 });
