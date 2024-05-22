@@ -30,7 +30,7 @@ const App = () => {
       try{
         const result = await apiCall({
           method: "POST",
-          uri: "/auth/validate",
+          uri: "auth/validate",
           body: {},
           isJwt: true,
         });

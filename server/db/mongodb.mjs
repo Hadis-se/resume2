@@ -9,7 +9,8 @@ import { MongoClient } from 'mongodb';
 
 
  let client = '';
- let users = '';  
+ let users = '';
+ let results = '';  
 
  export const initMongodb = async () => {
    
@@ -18,6 +19,7 @@ import { MongoClient } from 'mongodb';
     await client.connect();
      users = client.db().collection('users');
      users.createIndex({email: 1}, {unique: true});
+     results = client.db().collection('results');
   }
   return client;
  
@@ -37,6 +39,15 @@ export const findUserByEmail = async (email) => {
     email
   });
    return result;
+
+}
+
+export const saveResults = async (resultPayload) => {
+
+  const result = await results.insertOne(resultPayload);
+  return result;
+  
+
 
 }
 

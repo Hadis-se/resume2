@@ -26,6 +26,7 @@ const CreateCV = ({ setResult }) => {
   const navigate = useNavigate();
 
   const handleFormSubmit = (e) => {
+    debugger;
     e.preventDefault();
     const formData = new FormData();
     formData.append("headshotImage", headshot, headshot.name);
@@ -38,9 +39,17 @@ const CreateCV = ({ setResult }) => {
     formData.append("workHistory", JSON.stringify(companyInfo));
     formData.append("englishChecked", englishChecked);
     formData.append("frenchChecked", frenchChecked);
+    const token = localStorage.getItem('resume_server_jwt_token');
+
+
     if (englishChecked) {
       axios
-        .post(`${apiUrl}/resume/create`, formData, {})
+        .post(`${apiUrl}/resume/create`, formData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           if (res.data.message) {
             setResult(res.data.data);
@@ -51,7 +60,12 @@ const CreateCV = ({ setResult }) => {
     }
     else if (frenchChecked) {
       axios
-        .post(`${apiUrl}/resume/createFr`, formData, {})
+        .post(`${apiUrl}/resume/createFr`, formData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           if (res.data.message) {
             setResult(res.data.data);
